@@ -134,7 +134,7 @@ Como complemento, se implementó un circuito antirrebote destinado a mejorar la 
 ## Anexos
 
 ![Diagrama de LCD](images2/lcd_page-0001.jpg)
-![Diagrama de Puente H](images2/puente%h_page-0001.jpg)
+![Diagrama de Puente H](images2/puenteh_page-0001.jpg)
 ![Diagrama de Circuito antirrebote](images2/Antirrebote_page-0001.jpg)
 ![Diagrama de Contador](images2/contador_page-0001.jpg)
 ![Diagrama de Proyecto](images2/Proyecto_page-0001.jpg)

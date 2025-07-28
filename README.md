@@ -67,6 +67,40 @@ Adicionalmente, para completar el sistema fue necesario incluir otros módelos a
   
 - Contador: El módulo contador implementa un contador ascendente de 10 bits, lo que le permite contar hasta un valor máximo de 1023. Su valor se incrementa cuando se detecta un flanco de subida en la señal de entrada cuenta. A diferencia de los contadores tradicionales, no utiliza el reloj principal de la FPGA como señal de sincronización, ya que su propósito específico es contar los objetos detectados por el sensor ultrasónico, reaccionando únicamente a los eventos generados por dicho sensor.
 
+#### Protocolo I2C
+A lo largo del proyecto se consideró la opción de realizar una clasificación de los objetos contados por color, por lo que se realizó el intento de implementar un sensor de color TCS34725, al trabajar en esto se presentó la necesidad de crear un módulo que implementara un protocolo I2C en la FPGA ya que esta no cuenta con este. El protocolo I2C (Inter-Integrated Circuit) permite la comunicación entre varios dispositivos, un Maestro (Encargado de iniciar y controlar la comunicación) y uno o varios esclavos (Responde a las órdenes del maestro). Para esto se utilizan dos líneas, una de reloj (SCL) y otra de datos (SDA), que permiten determina el inicio (con SDA = 0 y SCL = 1) y el final (con SDA = 1 y SCL = 1, por parte del maestro para realizar el envío de los bits. Para cada bit enviado, el esclavo debe generar una repuesta utilizando SDA, que indica reconocimiento de la información.
+
+Debido a que la FPGA no cuenta con el protocolo, se procedió a crear el módulo i2c_master_read2bytes. 
+* Entradas del módulo:
+  - clk: El el reloj del sistema.
+  - rst: Señal de reset.
+  - start: Señal que inicia la comunicación I2C.
+  - dev_addr [6:0]: Dirección del esclavo.
+  - reg_addr [7:0]: Dirección del registro dentro del esclavo del que se leerán los datos.
+ 
+* Salidas del módulo:
+  - data_out [15:0]: Entregas los datos recibidos.
+  - busy: Indica que una operación está en proceso.
+  - done: Indica que no se está realizando ninguna operación.
+  El modulo cuenta con un divisor que permite utilizar un reloj más lento y compatible con I2C que el de la FPGA.
+
+* Descripción de cada estado:
+  - IDLE: Estado inicial, se encarga de resetear las flags.
+  - START: Inicia la comunicación.
+  - SLA_W: Envía la dirección del esclavo con el bit de escritura.
+  - REG: Envía el registro del esclavo del cual se leerán los datos.
+  - REP_START: Cracterística del protocolo I2C que permite cambiar la operación de lectura a escritura.
+  - SLA_R: Envía la dirección del esclavo con bit de lectura.
+  - READ1: Lee el primer byte de información.
+  - ACK1:	Envía ACK (reconocimiento) al esclavo, lo que permite identificar que se ha leído el primer bit está listo para continuar con el siguiente.
+  - READ2: Lee el segundo byte de información.
+  - NACK: Indica que se recibió la información y termina la lectura.
+  - STOP: Detiene la comunicación.
+  - DONE: Entrega una salida con los datos y regresa al estado inicial.
+  
+
+
+
 ## Simulaciones 
 
 <!-- (Incluir las de Digital si hicieron uso de esta herramienta, pero también deben incluir simulaciones realizadas usando un simulador HDL como por ejemplo Icarus Verilog + GTKwave) -->
@@ -91,7 +125,7 @@ Se optó por emplear una FPGA debido a su capacidad de ejecutar varias operacion
 
 Como complemento, se implementó un circuito antirrebote destinado a mejorar la estabilidad de la señal proveniente del pin out del sensor infrarrojo. Gracias a este filtrado, se evitaron lecturas falsas ocasionadas por fluctuaciones o interferencias, lo que contribuyó a aumentar la precisión y la confiabilidad de las mediciones obtenidas.
 
-A lo largo del proyecto se consideró la opción de realizar una clasificación de los objetos contados por color, por lo que se realizó el intento de implementar un sensor de color TCS34725, al trabajar en esto se presentó la necesidad de crear un módulo que implementara un protocolo I2C en la FPGA 
+
  
 ## Anexos
 

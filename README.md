@@ -5,9 +5,9 @@
 # Proyecto Final Electrónica Digital I SmartCount
 
 # Integrantes
-Orozco. R. Ana
-Ospina. P. Stefannie
-Pulido. F. José
+- Orozco. R. Ana
+- Ospina. P. Stefannie
+- Pulido. F. José
 
 # Informe
 

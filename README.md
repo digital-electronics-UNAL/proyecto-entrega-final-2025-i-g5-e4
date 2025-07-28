@@ -24,18 +24,14 @@ La elección de una FPGA como núcleo del sistema responde a la necesidad de con
 
 ### Descripción
 A continuación se presenta la descripción de cada módulo que compone el proyecto para cada uno de los elementos que lo componen:
-#### Sensor de ultrasonido
-- controlador_ultrasonido:
-- controlador_ultrasonido.bak:
 
 #### Pantalla LCD
-- LCD1602_controller:
   
-Este módulo implementa un controlador para una pantalla LCD tipo 1602, permitiendo mostrar tanto texto estático como datos numéricos dinámicos. El controlador se basa en una máquina de estados finitos (FSM) que gestiona de forma secuencial la inicialización de la pantalla, la escritura de mensajes predefinidos en ambas líneas y la actualización periódica del contenido dinámico, como la cantidad de objetos contados. El texto estático se almacena en una memoria cargada desde archivo, mientras que los valores dinámicos se reciben como entrada (in) y se descomponen en centenas, decenas y unidades para su visualización en formato ASCII.
+El módulo LCD1602_controller implementa un controlador para una pantalla LCD tipo 1602, permitiendo mostrar tanto texto estático como datos numéricos dinámicos. El controlador se basa en una máquina de estados finitos (FSM) que gestiona de forma secuencial la i0nicialización de la pantalla, la escritura de mensajes predefinidos en ambas líneas y la actualización periódica del contenido dinámico, como la cantidad de objetos contados. El texto estático se almacena en una memoria cargada desde archivo, mientras que los valores dinámicos se reciben como entrada (in) y se descomponen en centenas, decenas y unidades para su visualización en formato ASCII.
 
 Para cumplir con los tiempos requeridos por la pantalla, el módulo emplea un divisor de frecuencia que genera pulsos cada 16 ms. A cada transición del pulso, se avanza en la FSM para enviar comandos o datos según el estado actual. La lógica de escritura dinámica permite mostrar números de hasta tres dígitos, usando una pequeña máquina de estados dentro del estado DYNAMIC_TEXT. Este diseño modular y parametrizable no solo cumple con los requerimientos de interfaz, sino que también permite adaptarse fácilmente a otros sistemas embebidos basados en FPGA que requieran salida visual clara y actualizable.
 
-![Diagrama de estados](images/estados_LCD.png)
+![Diagrama de estados](images2/estados_LCD.png)
 
 * Descripción de cada estado:
 - IDLE:	Espera la señal ready_i. Se resetean los contadores.
@@ -48,14 +44,26 @@ Para cumplir con los tiempos requeridos por la pantalla, el módulo emplea un di
 
 #### Puente H
 
-
-
-
-
-
-
+El módulo controlador_motor gestiona la activación, dirección y velocidad de un motor de corriente continua mediante señales de control y modulación por ancho de pulso (PWM), utilizando una arquitectura basada en lógica secuencial. El sistema opera en tres estados (IDLE, CLOCK_WISE y COUNTER_CLOCK_WISE), definidos por la señal de entrada sel, y emplea una máquina de estados finitos (FSM) sencilla para controlar la dirección del motor a través de las señales AIN1 y AIN2. Además, incorpora una función de pausa temporal activada mediante el pulsador boton_pausa, la cual detiene el motor durante aproximadamente 2 segundos utilizando un contador sincronizado al reloj de 50 MHz, desactivando la señal PWM durante ese intervalo como medida de seguridad o control manual. La señal PWMA, que regula la velocidad del motor, se genera con una frecuencia cercana a 24 kHz mediante un divisor de reloj, y su ciclo de trabajo (duty cycle) se ajusta dinámicamente mediante la entrada pwm_duty. Esta implementación permite un control eficiente y flexible del motor en aplicaciones de automatización basadas en FPGA.
 
 ![Diagrama de puente H](https://github.com/jpulidof/Proyecto-EDI-Smarcount-G5-E4/blob/main/images/estados%20puenteH.jpg?raw=true)
+
+* Descripción de cada estado:
+- IDLE: El motor está detenido sin movimiento. Es el estado inicial tras un reinicio (reset).
+- CLOCK_WISE: El motor gira en sentido horario. La corriente fluye del terminal A al B del motor.
+- COUNTER_CLOCK_WISE: El motor gira en sentido antihorario.
+- PROTECTION (pausa activa): El motor se detiene temporalmente por seguridad o por pulsación del botón, sin importar el valor de sel.
+
+#### Sensor infrarrojo
+El módulo top_ultrasonic funciona como la unidad principal de integración del sistema. Se encarga de contar los eventos generados por el sensor de infrarrojo y mostrar dicho conteo en la pantalla LCD, además de gestionar la integración del motor dentro del sistema. Para cumplir con estas funciones, instancia varios módulos previamente descritos: antirrebote, que filtra la señal proveniente del sensor infrarrojo; contador, que registra el número de eventos detectados; LCD1602_controller, encargado de mostrar el valor del contador en la pantalla LCD; y controlador_motor, que determina el sentido de giro, la activación y la velocidad del motor. En conjunto, este módulo coordina la interacción entre las distintas partes del sistema, asegurando un funcionamiento sincronizado y confiable.
+
+#### Otros módulos
+
+Adicionalmente, para completar el sistema fue necesario incluir otros módelos además de los encargados de cada sensor, los cuales se presentan a continuación:
+
+- Circuito antirebote: Un circuito antirrebote es un sistema diseñado para eliminar las lecturas erróneas causadas por los rebotes eléctricos que se producen cuando una señal digital cambia de estado, como ocurre comúnmente con botones o entradas mecánicas. En el contexto de un sensor de infrarrojo, el antirrebote se aplica típicamente a la señal de entrada del pin out, que indica la detección de un objeto. Si esta señal presenta fluctuaciones rápidas o inestables debido a interferencias o ruido, el sistema podría interpretar múltiples detecciones falsas o medir distancias incorrectas. El circuito antirrebote sincroniza esta señal con el reloj del sistema y verifica que el cambio de estado se mantenga constante durante un tiempo mínimo antes de considerarlo válido. De esta manera, se asegura que solo se registren transiciones reales y estables, mejorando la precisión y confiabilidad de la medición del sensor infrarrojo.
+  
+- Contador: El módulo contador implementa un contador ascendente de 10 bits, lo que le permite contar hasta un valor máximo de 1023. Su valor se incrementa cuando se detecta un flanco de subida en la señal de entrada cuenta. A diferencia de los contadores tradicionales, no utiliza el reloj principal de la FPGA como señal de sincronización, ya que su propósito específico es contar los objetos detectados por el sensor ultrasónico, reaccionando únicamente a los eventos generados por dicho sensor.
 
 ## Simulaciones 
 

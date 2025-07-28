@@ -5,9 +5,10 @@
 # Proyecto Final Electrónica Digital I SmartCount
 
 # Integrantes
-- Orozco. R. Ana
-- Ospina. P. Stefannie
-- Pulido. F. José
+- [José Luis Pulido Fonseca](https://github.com/jpulidof)  
+- [Nicolle Stefannie Ospina Pérez](https://github.com/stefannie4)
+- [Ana María Orozco Reyes](https://github.com/anaor17)
+
 
 # Informe
 
@@ -33,7 +34,7 @@ El módulo LCD1602_controller implementa un controlador para una pantalla LCD ti
 
 Para cumplir con los tiempos requeridos por la pantalla, el módulo emplea un divisor de frecuencia que genera pulsos cada 16 ms. A cada transición del pulso, se avanza en la FSM para enviar comandos o datos según el estado actual. La lógica de escritura dinámica permite mostrar números de hasta tres dígitos, usando una pequeña máquina de estados dentro del estado DYNAMIC_TEXT. Este diseño modular y parametrizable no solo cumple con los requerimientos de interfaz, sino que también permite adaptarse fácilmente a otros sistemas embebidos basados en FPGA que requieran salida visual clara y actualizable.
 
-![Diagrama de estados](images2/estados_LCD.png)
+![Diagrama de estados LCD.](images2/estados_LCD.png)
 
 * Descripción de cada estado:
 - IDLE:	Espera la señal ready_i. Se resetean los contadores.
@@ -48,7 +49,7 @@ Para cumplir con los tiempos requeridos por la pantalla, el módulo emplea un di
 
 El módulo controlador_motor gestiona la activación, dirección y velocidad de un motor de corriente continua mediante señales de control y modulación por ancho de pulso (PWM), utilizando una arquitectura basada en lógica secuencial. El sistema opera en tres estados (IDLE, CLOCK_WISE y COUNTER_CLOCK_WISE), definidos por la señal de entrada sel, y emplea una máquina de estados finitos (FSM) sencilla para controlar la dirección del motor a través de las señales AIN1 y AIN2. Además, incorpora una función de pausa temporal activada mediante el pulsador boton_pausa, la cual detiene el motor durante aproximadamente 2 segundos utilizando un contador sincronizado al reloj de 50 MHz, desactivando la señal PWM durante ese intervalo como medida de seguridad o control manual. La señal PWMA, que regula la velocidad del motor, se genera con una frecuencia cercana a 24 kHz mediante un divisor de reloj, y su ciclo de trabajo (duty cycle) se ajusta dinámicamente mediante la entrada pwm_duty. Esta implementación permite un control eficiente y flexible del motor en aplicaciones de automatización basadas en FPGA.
 
-![Diagrama de puente H](https://github.com/jpulidof/Proyecto-EDI-Smarcount-G5-E4/blob/main/images/estados%20puenteH.jpg?raw=true)
+![Diagrama de estados puente H](https://github.com/jpulidof/Proyecto-EDI-Smarcount-G5-E4/blob/main/images/estados%20puenteH.jpg?raw=true)
 
 * Descripción de cada estado:
 - IDLE: El motor está detenido sin movimiento. Es el estado inicial tras un reinicio (reset).
@@ -84,6 +85,9 @@ Debido a que la FPGA no cuenta con el protocolo, se procedió a crear el módulo
   - done: Indica que no se está realizando ninguna operación.
   El modulo cuenta con un divisor que permite utilizar un reloj más lento y compatible con I2C que el de la FPGA.
 
+![Diagrama de estados protocolo I2C.](images2/estadosI2C.png)
+
+
 * Descripción de cada estado:
   - IDLE: Estado inicial, se encarga de resetear las flags.
   - START: Inicia la comunicación.
@@ -98,22 +102,22 @@ Debido a que la FPGA no cuenta con el protocolo, se procedió a crear el módulo
   - STOP: Detiene la comunicación.
   - DONE: Entrega una salida con los datos y regresa al estado inicial.
   
-
+ Sin embargo, debido a complicaciones con ila implementación del sensor de color, este módulo no es utilizado en la presentación final del proyecto. Sin embargo se espera que sea utilizado en futuras mejoras del proyecto, para implementar la clasificación de objetos.
 
 
 ## Simulaciones 
 
 <!-- (Incluir las de Digital si hicieron uso de esta herramienta, pero también deben incluir simulaciones realizadas usando un simulador HDL como por ejemplo Icarus Verilog + GTKwave) -->
 A continuación se muestra la simulación del circuito antirrebote, se observan las entradas btn (entrada que se filtra) y clk (reloj), también muestra la señal btn_sync que estásincronizada con el reloj y la cuenta (count) que se realiza si en el flanco de subida del reloj y cuenta la duración de del pulso, el contador se reinicia cuando se lee un valor de btn_sync de cero.
-![Diagrama de estados](images2/antirrebote.jpeg)
+![Simulación circuito antirrebote.](images2/antirrebote.jpeg)
 
 A continuación se presenta la simulación del contador, el cual posee las entradas rst_n, que es un reset que se activa al estar en 0, además de cuanta, que la señal a la cual se le realiza conteo de sus pulsos. También se muestra el comportamiento de la señal q, que es la que se presenta a la salida y representa el valor actual del registro, mientras que la señal d es el estado futuro de la cuenta.
-![Diagrama de estados](images2/contador.jpeg)
+![Simulación contador.](images2/contador.jpeg)
 
-
-![Diagrama de estados](images2/motor.jpeg)
+En la simulación de motor se observa el comportamientop de las variables que definen su funcionamiento, como el sentido de giro (AIN1, AIN2, CLOCK_WISE y COUNTER_CLOCK_WISE).
+![Simulación del motor](images2/motor.jpeg)
 En el diagrama de simulación correspondiente a la LCD, se observa el cambio de la variable ready_i que permite al sistema salir del estado icicial y pasar al de configuración del LCD. También se puede observar el valor de las variables que indican la cantidad de bits que son enviados (DATA_BITS, NUM_DATA_ALL, NUM_DATA_PERLINE).
-![Diagrama de estados](images2/LCD.jpeg)
+![Simulación del LCD.](images2/LCD.jpeg)
 
 
 
@@ -130,7 +134,10 @@ Como complemento, se implementó un circuito antirrebote destinado a mejorar la 
 ## Anexos
 
 ![Diagrama de LCD](images/lcd_page-0001.jpg)
-![Diagrama de LCD](images/puente%20h_page-0001.jpg)
+![Diagrama de Puente H](images/puente%20h_page-0001.jpg)
+![Diagrama de Circuito antirrebote](Antirrebote_page-0001.jpg)
+![Diagrama de Contador](contador_page-0001.jpg)
+![Diagrama de Proyecto](Proyecto_page-0001.jpg)
 
 
 ## Conclusiones
@@ -139,5 +146,3 @@ Como complemento, se implementó un circuito antirrebote destinado a mejorar la 
  - La implementación del sensor TCS34725 con el protocolo I2C en la FPGA presentó desafíos inesperados, principalmente por la inestabilidad en la comunicación y desconocimiento del manejo del mismo. Aunque se resolvió posteriormente con un sensor infrarojo, evidenció que protocolos "sencillos" como I2C requieren diseño cuidadoso . Este problema retrasó el desarrollo, pero dejó lecciones valiosas para futuras integraciones de sensores.
 
   - Este proyecto demostró que se pueden crear sistemas de automatización accesibles para pequeñas empresas usando FPGAs, tal como planeamos al principio. Aunque tuvimos problemas para conectar algunos componentes, el sistema aunque no funciona en su totalidad, cumple con lo propuesto. Lo más valioso fue aprender resolviendo desafíos reales, que es justo lo que buscábamos con este trabajo.
-
-## Referencias

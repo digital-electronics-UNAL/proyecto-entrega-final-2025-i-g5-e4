@@ -71,6 +71,12 @@ Adicionalmente, para completar el sistema fue necesario incluir otros módelos a
 
 <!-- (Incluir las de Digital si hicieron uso de esta herramienta, pero también deben incluir simulaciones realizadas usando un simulador HDL como por ejemplo Icarus Verilog + GTKwave) -->
 
+![Diagrama de estados](images2/antirrebote.jpeg)
+![Diagrama de estados](images2/contador.jpeg)
+![Diagrama de estados](images2/motor.jpeg)
+![Diagrama de estados](images2/LCD.jpeg)
+
+
 
 ## Implementación
 

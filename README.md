@@ -70,23 +70,28 @@ Adicionalmente, para completar el sistema fue necesario incluir otros módelos a
 ## Simulaciones 
 
 <!-- (Incluir las de Digital si hicieron uso de esta herramienta, pero también deben incluir simulaciones realizadas usando un simulador HDL como por ejemplo Icarus Verilog + GTKwave) -->
-
+A continuación se muestra la simulación del circuito antirrebote, se observan las entradas btn (entrada que se filtra) y clk (reloj), también muestra la señal btn_sync que estásincronizada con el reloj y la cuenta (count) que se realiza si en el flanco de subida del reloj y cuenta la duración de del pulso, el contador se reinicia cuando se lee un valor de btn_sync de cero.
 ![Diagrama de estados](images2/antirrebote.jpeg)
+
+A continuación se presenta la simulación del contador, el cual posee las entradas rst_n, que es un reset que se activa al estar en 0, además de cuanta, que la señal a la cual se le realiza conteo de sus pulsos. También se muestra el comportamiento de la señal q, que es la que se presenta a la salida y representa el valor actual del registro, mientras que la señal d es el estado futuro de la cuenta.
 ![Diagrama de estados](images2/contador.jpeg)
+
+
 ![Diagrama de estados](images2/motor.jpeg)
+En el diagrama de simulación correspondiente a la LCD, se observa el cambio de la variable ready_i que permite al sistema salir del estado icicial y pasar al de configuración del LCD. También se puede observar el valor de las variables que indican la cantidad de bits que son enviados (DATA_BITS, NUM_DATA_ALL, NUM_DATA_PERLINE).
 ![Diagrama de estados](images2/LCD.jpeg)
 
 
 
 ## Implementación
 
-El proyecto se enfocó en el desarrollo de un sistema automatizado, basado en FPGA, para el conteo de cubos que se desplazaban sobre una banda transportadora. Para detectar cada elemento, se utilizó un sensor ultrasónico cuya señal fue procesada por la FPGA. Esta actuó como unidad de control, incrementando un contador y mostrando en una pantalla LCD el número total de cubos detectados en tiempo real. El diseño permitió mantener un funcionamiento confiable incluso cuando la velocidad de transporte variaba, y su estructura modular ofrece la posibilidad de adaptarlo fácilmente a otras aplicaciones industriales que requieran tareas similares de conteo o clasificación.
+El proyecto se enfocó en el desarrollo de un sistema automatizado, basado en FPGA, para el conteo de cubos que se desplazaban sobre una banda transportadora. Para detectar cada elemento, se utilizó un sensor infrarrojo cuya señal fue procesada por la FPGA. Esta actuó como unidad de control, incrementando un contador y mostrando en una pantalla LCD el número total de cubos detectados en tiempo real. El diseño permitió mantener un funcionamiento confiable y se realizador pruebas para definir la velocidad más conveniente para el motor, y su estructura modular ofrece la posibilidad de adaptarlo fácilmente a otras aplicaciones industriales que requieran tareas similares de conteo o clasificación.
 
 Se optó por emplear una FPGA debido a su capacidad de ejecutar varias operaciones en paralelo, lo que facilitó la integración de la lectura del sensor, el procesamiento del conteo y el control de la visualización. Esta característica, sumada a su flexibilidad y posibilidad de reconfiguración, hizo que el sistema resultara eficiente y escalable.
 
-Como complemento, se implementó un circuito antirrebote destinado a mejorar la estabilidad de la señal proveniente del pin \texttt{echo} del sensor HC-SR04. Gracias a este filtrado, se evitaron lecturas falsas ocasionadas por fluctuaciones o interferencias, lo que contribuyó a aumentar la precisión y la confiabilidad de las mediciones obtenidas.
+Como complemento, se implementó un circuito antirrebote destinado a mejorar la estabilidad de la señal proveniente del pin out del sensor infrarrojo. Gracias a este filtrado, se evitaron lecturas falsas ocasionadas por fluctuaciones o interferencias, lo que contribuyó a aumentar la precisión y la confiabilidad de las mediciones obtenidas.
 
-
+A lo largo del proyecto se consideró la opción de realizar una clasificación de los objetos contados por color, por lo que se realizó el intento de implementar un sensor de color TCS34725, al trabajar en esto se presentó la necesidad de crear un módulo que implementara un protocolo I2C en la FPGA 
  
 ## Anexos
 

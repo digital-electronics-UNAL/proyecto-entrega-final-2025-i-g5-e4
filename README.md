@@ -128,7 +128,10 @@ El proyecto se enfocó en el desarrollo de un sistema automatizado, basado en FP
 Se optó por emplear una FPGA debido a su capacidad de ejecutar varias operaciones en paralelo, lo que facilitó la integración de la lectura del sensor, el procesamiento del conteo y el control de la visualización. Esta característica, sumada a su flexibilidad y posibilidad de reconfiguración, hizo que el sistema resultara eficiente y escalable.
 
 Como complemento, se implementó un circuito antirrebote destinado a mejorar la estabilidad de la señal proveniente del pin out del sensor infrarrojo. Gracias a este filtrado, se evitaron lecturas falsas ocasionadas por fluctuaciones o interferencias, lo que contribuyó a aumentar la precisión y la confiabilidad de las mediciones obtenidas.
-
+## Videos
+A continuación se presentan dos videos, en el primero los integrantes del grupo realizan una presentación del proyecto y en el segundo se muestra el funcionamiento de este. Para tener acceso es necesario ingresar con el correo de la universidad.
+[![Video Presentación de Proyecto](https://img.drive.google.com/file/d/1PxlMJenUqnVecJeZmMJzV-3Dh7zvKv0d/view?usp=sharing.jpg)](https://drive.google.com/file/d/1PxlMJenUqnVecJeZmMJzV-3Dh7zvKv0d/view?usp=sharing))
+[Descargar video Funcionamiento de proyecto](videos/FuncionamientoBanda.mp4)
 
  
 ## Anexos

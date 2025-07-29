@@ -130,8 +130,10 @@ Se optó por emplear una FPGA debido a su capacidad de ejecutar varias operacion
 Como complemento, se implementó un circuito antirrebote destinado a mejorar la estabilidad de la señal proveniente del pin out del sensor infrarrojo. Gracias a este filtrado, se evitaron lecturas falsas ocasionadas por fluctuaciones o interferencias, lo que contribuyó a aumentar la precisión y la confiabilidad de las mediciones obtenidas.
 ## Videos
 A continuación se presentan dos videos, en el primero los integrantes del grupo realizan una presentación del proyecto y en el segundo se muestra el funcionamiento de este. Para tener acceso es necesario ingresar con el correo de la Universidad Nacional de Colombia.
-[![Video Presentación de Proyecto](https://drive.google.com/file/d/1PxlMJenUqnVecJeZmMJzV-3Dh7zvKv0d/view?usp=sharing)
-[![Video Funcionamiento de proyecto]((https://drive.google.com/file/d/1Q0P23ZSFGO2xR1xYNPJaS49RbH3QPYqj/view?usp=sharing))
+[![Video Presentación de Proyecto](https://img.icons8.com/ios-filled/100/youtube-play.png)](https://drive.google.com/file/d/1PxlMJenUqnVecJeZmMJzV-3Dh7zvKv0d/view)
+
+[![Video Funcionamiento de Proyecto](https://img.icons8.com/ios-filled/100/youtube-play.png)](https://drive.google.com/file/d/1Q0P23ZSFGO2xR1xYNPJaS49RbH3QPYqj/view)
+
 
  
 ## Anexos
